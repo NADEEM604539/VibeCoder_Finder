@@ -1,26 +1,105 @@
 @import "tailwindcss";
 
+/* ───────────────────────────────────────────────
+   Vibe Coder Finder — design tokens (see COLOR.MD)
+   ─────────────────────────────────────────────── */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --color-bg-obsidian: #0a0a0b;
+  --color-surface-carbon: #141416;
+  --color-border-steel: #27272a;
+  --color-accent-amber: #ff9900;
+  --color-accent-hazard: #d97706;
+  --color-text-monospace: #fafafa;
+  --color-alert-crimson: #dc2626;
 }
 
+/* Tailwind utilities: bg-obsidian, bg-carbon, border-steel,
+   text-amber-industrial, text-hazard, text-raw, text-crimson … */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-obsidian: var(--color-bg-obsidian);
+  --color-carbon: var(--color-surface-carbon);
+  --color-steel: var(--color-border-steel);
+  --color-amber-industrial: var(--color-accent-amber);
+  --color-hazard: var(--color-accent-hazard);
+  --color-raw: var(--color-text-monospace);
+  --color-crimson: var(--color-alert-crimson);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  color-scheme: dark;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-bg-obsidian);
+  color: var(--color-text-monospace);
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+}
+
+::selection {
+  background: var(--color-accent-amber);
+  color: var(--color-bg-obsidian);
+}
+
+/* ───────────── Login page effects ───────────── */
+
+/* Engineering-blueprint grid that fades out toward the edges */
+.bg-grid {
+  background-image:
+    linear-gradient(to right, rgb(39 39 42 / 0.55) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(39 39 42 / 0.55) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, #000 30%, transparent 75%);
+  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, #000 30%, transparent 75%);
+}
+
+/* Soft amber light source behind the card */
+.bg-glow {
+  background:
+    radial-gradient(600px 400px at 78% 45%, rgb(255 153 0 / 0.13), transparent 70%),
+    radial-gradient(500px 360px at 15% 85%, rgb(217 119 6 / 0.08), transparent 70%);
+}
+
+/* Console lines type in one after another */
+@keyframes log-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.log-line {
+  opacity: 0;
+  animation: log-in 0.5s ease-out forwards;
+}
+
+@keyframes blink {
+  0%, 49%   { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+.cursor {
+  animation: blink 1s steps(1) infinite;
+}
+
+/* Radar sweep on the logo */
+@keyframes sweep {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+.sweep {
+  transform-origin: 50% 50%;
+  animation: sweep 4s linear infinite;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { box-shadow: 0 0 0 0 rgb(255 153 0 / 0.55); }
+  50%      { box-shadow: 0 0 0 6px rgb(255 153 0 / 0); }
+}
+.pulse-dot {
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .log-line, .cursor, .sweep, .pulse-dot {
+    animation: none;
+    opacity: 1;
+  }
 }
